@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 import { cn } from "@/lib/utils";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { Card, CardTitle, CardDescription } from "@/components/ui/card";
+import { Item, ItemMedia, ItemContent, ItemTitle } from "@/components/ui/item";
+import { Spinner } from "@/components/ui/spinner";
 
 interface ImageParams {
   url: string;
@@ -53,14 +55,6 @@ const ImageSlider = ({ url, limit = 5, page = 1 }: ImageParams) => {
     }
   }, [fetchImages, url]);
 
-  if (loading) {
-    return (
-      <div>
-        <p>Loading Images...</p>
-      </div>
-    );
-  }
-
   if (errorMsg !== null) {
     return <div className="error-container">Error: {errorMsg}</div>;
   }
@@ -77,7 +71,7 @@ const ImageSlider = ({ url, limit = 5, page = 1 }: ImageParams) => {
 
   return (
     <Card className="flex h-svh w-full flex-col items-center justify-center gap-6 px-8 py-4">
-      <CardTitle className="-mb-4">Image Slider</CardTitle>
+      <CardTitle className="-mb-4 text-3xl">Image Slider</CardTitle>
       <CardDescription>
         Browse through a collection of high-quality images using the navigation
         controls.
@@ -85,24 +79,38 @@ const ImageSlider = ({ url, limit = 5, page = 1 }: ImageParams) => {
       <div className="relative flex h-64 w-md items-center justify-center p-8 lg:w-lg">
         <BsArrowLeftCircleFill
           onClick={handlePrev}
-          className="arrow-icon left-4"
+          className={cn("arrow-icon left-4", loading ? "hidden" : "block")}
         />
-        {images && images.length
-          ? images.map((image, index) => (
-              <img
-                className={cn(
-                  "absolute inset-0 h-full w-full rounded-3xl object-cover shadow-md transition-opacity duration-300 ease-in-out",
-                  currentSlide === index ? "z-1 opacity-100" : "z-0 opacity-0",
-                )}
-                key={image.id}
-                src={image.download_url}
-                alt="Laptop Image"
-              />
-            ))
-          : null}
+
+        {loading ? (
+          <div className="flex w-[50%] max-w-xs flex-col gap-4 [--radius:1rem]">
+            <Item variant="outline">
+              <ItemMedia>
+                <Spinner />
+              </ItemMedia>
+              <ItemContent>
+                <ItemTitle className="line-clamp-1">
+                  Loading Images...
+                </ItemTitle>
+              </ItemContent>
+            </Item>
+          </div>
+        ) : images && images.length ? (
+          images.map((image, index) => (
+            <img
+              className={cn(
+                "absolute inset-0 h-full w-full rounded-3xl object-cover shadow-md transition-opacity duration-300 ease-in-out",
+                currentSlide === index ? "z-1 opacity-100" : "z-0 opacity-0",
+              )}
+              key={image.id}
+              src={image.download_url}
+              alt="Laptop Image"
+            />
+          ))
+        ) : null}
         <BsArrowRightCircleFill
           onClick={handleNext}
-          className="arrow-icon right-4"
+          className={cn("arrow-icon right-4", loading ? "hidden" : "block")}
         />
         <span className="absolute bottom-4 mt-4 flex items-center justify-center gap-2">
           {images && images.length
@@ -114,6 +122,7 @@ const ImageSlider = ({ url, limit = 5, page = 1 }: ImageParams) => {
                       ? "scale-125 bg-black shadow-2xl shadow-white"
                       : "bg-gray-50 shadow-2xl shadow-black",
                     "z-10 h-3 w-3 cursor-pointer items-center justify-center rounded-full hover:scale-120",
+                    loading ? "hidden" : "block",
                   )}
                   onClick={() => setCurrentSlide(index)}
                 ></button>

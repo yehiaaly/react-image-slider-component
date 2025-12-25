@@ -6,14 +6,12 @@ A high-performance, polished, and fully responsive **Image Slider** built with *
 
 ## 🚀 Live Demo
 
-Check out the live demo here: [Live Demo](https://practice-react-image-slider.pages.dev/)
+Check out the live demo here: [Live Demo](https://react-image-slider-component.pages.dev/)
 
 ## ✨ Features
 
 - **Dynamic Fetching**: Loads high-quality images directly from the Picsum API based on configurable limits.
 - **Smooth Transitions**: Utilizes custom Tailwind CSS animations and opacity transitions for a premium "fade" effect.
-- **Responsive Design**: Fully optimized for mobile, tablet, and desktop viewports using Tailwind's layout engine.
-- **Interactive Controls**: Features intuitive navigation arrows and circular indicators that sync with the current slide.
 - **Performance Optimized**: Uses `useCallback` for stable function references and `opacity` layering for GPU-accelerated animations.
 - **Modern Tech Stack**: Built with **React 19**, **Shadcn UI**, and **Tailwind v4**.
 
